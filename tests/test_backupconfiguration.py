@@ -81,7 +81,7 @@ class TestBackupConfiguration(LoggedTestCase):
 
     def test_storage_client(self):
         """test storage_client"""
-        if not os.environ.has_key('STORAGE_KEY'):
+        if 'STORAGE_KEY' not in os.environ:
             return True
         client = self.cfg.storage_client
         self.assertEqual(client.protocol, 'https')

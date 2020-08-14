@@ -50,7 +50,7 @@ class BackupAgent(object):
                 if parts is None:
                     continue
                 start_timestamp = parts[2]
-                if not existing_blobs_dict.has_key(start_timestamp):
+                if start_timestamp not in existing_blobs_dict:
                     existing_blobs_dict[start_timestamp] = []
                 existing_blobs_dict[start_timestamp].append(blob_name)
             if results.next_marker:
@@ -92,9 +92,9 @@ class BackupAgent(object):
     def latest_backup_timestamp(self, fileset, is_full):
         """Return the timestamp for the latest backup for a given fileset."""
         existing_blobs_dict = self.existing_backups_for_fileset(fileset=fileset, is_full=is_full)
-        if not existing_blobs_dict.keys():
+        if not list(existing_blobs_dict.keys()):
             return "19000101_000000"
-        return Timing.sort(existing_blobs_dict.keys())[-1:][0]
+        return Timing.sort(list(existing_blobs_dict.keys()))[-1:][0]
 
     @staticmethod
     def should_run_full_backup(now_time, force, latest_full_backup_timestamp,
@@ -291,7 +291,7 @@ class BackupAgent(object):
         baks_list = self.existing_backups(filesets=filesets or [], container=container)
         for (blobname, date, length) in baks_list:
             #parts = Naming.parse_blobname(blobname)
-            print '{0} {1:12} {2}'.format(date, length, blobname)
+            print('{0} {1:12} {2}'.format(date, length, blobname))
 
     #
     # Prune methods.
@@ -423,7 +423,7 @@ class BackupAgent(object):
         day_f = lambda d: [None, "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][d]
         b2s_f = lambda x: {True:"1", False:"0"}[x]
         s_f = lambda day: "business_hours_{}:                 {}".format(day_f(day), "".join(map(b2s_f, business_hours.hours[day])))
-        hours = list(map(s_f, range(1, 8)))
+        hours = list(map(s_f, list(range(1, 8))))
 
         return [
             "azure.vm_name:                      {}".format(self.backup_configuration.get_vm_name()),

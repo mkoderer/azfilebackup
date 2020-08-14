@@ -7,7 +7,7 @@
 
 """AzureVMInstanceMetadata module."""
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import json
 from .backupexception import BackupException
 
@@ -34,8 +34,8 @@ class AzureVMInstanceMetadata(object):
         url = "http://169.254.169.254/metadata/instance?api-version={v}".format(v=api_version)
         try:
             return json.loads(
-                urllib2.urlopen(
-                    urllib2.Request(url, None, {'metadata': 'true'})).read())
+                urllib.request.urlopen(
+                    urllib.request.Request(url, None, {'metadata': 'true'})).read())
         except Exception as ex:
             raise BackupException("Failed to connect to Azure instance metadata endpoint {}:\n{}"
                                   .format(url, ex.message))

@@ -63,16 +63,16 @@ class BusinessHours(object):
         weekdays = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su']
 
         for day in range(0, 7):
-            if not self.tags.has_key(weekdays[day]):
+            if weekdays[day] not in self.tags:
                 raise BackupException("Missing schedule for {}".format(weekdays[day]))
             self.hours[day+1] = BusinessHours.parse_day(self.tags[weekdays[day]])
         
         # Also retrieve min/max retention values from tag
-        if not self.tags.has_key('min'):
+        if 'min' not in self.tags:
             raise BackupException("Missing value for min")
         self.min = self.tags['min']
 
-        if not self.tags.has_key('max'):
+        if 'max' not in self.tags:
             raise BackupException("Missing value for max")
         self.max = self.tags['max']
 
@@ -86,7 +86,7 @@ class BusinessHours(object):
             tags = dict(kvp.split(":", 1) for kvp in (tags_value.split(";")))
             return BusinessHours(tags=tags, schedule=schedule)
         except Exception as e:
-            raise(BackupException("Error parsing business hours '{}': {}".format(tags_value, e.message)))
+            raise BackupException
 
     @staticmethod
     def parse_day(day_values):
@@ -99,7 +99,7 @@ class BusinessHours(object):
             durations = [{"1":True, "0":False}[x] for x in hour_strs]
             return durations
         except Exception as e:
-            raise(BackupException("Error parsing business hours '{}': {}".format(day_values, e.message)))
+            raise BackupException
 
     def is_backup_allowed_dh(self, day, hour):
         """

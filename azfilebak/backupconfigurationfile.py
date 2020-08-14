@@ -33,12 +33,12 @@ class BackupConfigurationFile(object):
     def get_keys_prefix(self, prefix):
         """Retrieve all keys that match a certain prefix."""
         values = BackupConfigurationFile.read_key_value_file(filename=self.filename)
-        return [i for i in values.keys() if re.match(prefix, i)]
+        return [i for i in list(values.keys()) if re.match(prefix, i)]
 
     def key_exists(self, key):
         """Return True if a key exists in the configuration file."""
         values = BackupConfigurationFile.read_key_value_file(filename=self.filename)
-        return values.has_key(key)
+        return key in values
 
     @staticmethod
     def read_key_value_file(filename):
@@ -55,4 +55,4 @@ class BackupConfigurationFile(object):
             # skip comments and empty lines
             content_lines = [line for line in lines if not re.match(r"^\s*#|^\s*$", line)]
             content = dict(re.split(":|=", line, maxsplit=1) for line in content_lines)
-            return dict([(x[0].strip(), x[1].strip().strip('\"')) for x in content.iteritems()])
+            return dict([(x[0].strip(), x[1].strip().strip('\"')) for x in content.items()])

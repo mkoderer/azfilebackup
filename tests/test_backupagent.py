@@ -170,7 +170,7 @@ class TestBackupAgent(LoggedTestCase):
         self.assertGreater(len(backups_all), 0)
         # Non-existing fileset
         backups_none = self.agent.existing_backups(['XXX'])
-        self.assertEquals(len(backups_none), 0)
+        self.assertEqual(len(backups_none), 0)
 
     def test_list_backups(self):
         """Test list of existing backups."""
@@ -215,7 +215,7 @@ class TestBackupAgent(LoggedTestCase):
     def test_show_configuration(self):
         """Test show_configuration."""
         conf = self.agent.show_configuration('/tmp')
-        print conf
+        print(conf)
         return True
 
     def test_backup_default(self):

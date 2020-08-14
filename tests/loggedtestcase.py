@@ -16,7 +16,7 @@ class LogThisTestCase(type):
             setUp = dct['setUp']
         else:
             setUp = lambda self: None
-            print "creating setUp..."
+            print("creating setUp...")
 
         def wrappedSetUp(self):
             # for hdlr in self.logger.handlers:
@@ -40,9 +40,7 @@ class LogThisTestCase(type):
         # return the class instance with the replaced setUp/tearDown
         return type.__new__(cls, name, bases, dct)
 
-class LoggedTestCase(unittest.TestCase):
-    __metaclass__ = LogThisTestCase
-    # Default
+class LoggedTestCase(unittest.TestCase, metaclass=LogThisTestCase):
     logging.basicConfig(level=logging.DEBUG)
     # Trim down some logs 
     logging.getLogger('azure.storage').setLevel(logging.ERROR)
